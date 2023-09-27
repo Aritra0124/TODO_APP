@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from django.contrib.messages import constants as messages
 
 class envData:
     DB_NAME = os.getenv('MYSQL_DATABASE')
@@ -34,9 +35,9 @@ SECRET_KEY = 'django-insecure-d3!oju_l*mx)=r%$ny7j*h18w=(b1*(u)xwxymuz-g)iz&^u7^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
-
+CSRF_TRUSTED_ORIGINS = ['http://*']
 # Application definition
 
 INSTALLED_APPS = [
@@ -78,7 +79,13 @@ TEMPLATES = [
         },
     },
 ]
-
+MESSAGE_TAGS = {
+    messages.DEBUG: 'alert-secondary',
+    messages.INFO: 'alert-info',
+    messages.SUCCESS: 'alert-success',
+    messages.WARNING: 'alert-warning',
+    messages.ERROR: 'alert-danger',
+}
 WSGI_APPLICATION = 'todo_project.wsgi.application'
 
 
@@ -91,8 +98,8 @@ DATABASES = {
         'NAME': envData.DB_NAME,
         'USER': envData.DB_USER,
         'PASSWORD': envData.DB_PASSWORD,
-        'HOST': envData.DB_HOST,
-        'PORT': int(envData.DB_PORT),
+        'HOST': envData.DB_HOST,  # Use the same name as your Docker Compose service
+        'PORT': envData.DB_PORT,  # Should be 3306 based on your environment variable
     },
 }
 
@@ -115,6 +122,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -131,8 +145,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = '/static/'
 STATIC_ROOT = '/static/'
+STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include 'message.html' %}
+
+{% if request.user.is_authenticated == False %}
+    <div>
+      <div class="card bg-light" style="margin-left: 40%; margin-right: 40%; margin-top: 5%; margin-bottom: 5%; ">
+        <div class="card-header text-center">
+            <h1 class="card-title">Login</h1>
+        </div>
+        <div class="card-body">
+           <div id="login">
+            <form method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            {{ login_form }}
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success ">Login</button>
+                </div>
+                <div id="register_text">
+                    register
+                </div>
+            </form>
+           </div>
+            <div id="register" style="display: none;">
+                <form method="post" action="{% url 'register' %}">
+                {% csrf_token %}
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            {{ registration_form }}
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success ">Register</button>
+                </div>
+                    <div id="login_text">
+                    login
+                </div>
+                </form>
+            </div>
+        </div>
+        <div class="card-footer text-muted text-center">
+            @ ToDo APP
+        </div>
+      </div>
+    </div>
+{% endif %}
+{% if request.user.is_authenticated == True %}
+    <p>Authenticated</p>
+      <a href="{% url 'logout' %}" class="text-warning">LogOut</a>
+{% endif %}
+{% endblock %}
