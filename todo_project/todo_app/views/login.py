@@ -1,9 +1,8 @@
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
-from todo_project.todo_app.forms import LoginForm, RegistrationForm
+from ..forms import LoginForm, RegistrationForm
 from django.contrib import messages
-
-
+from .asana_connection import test
 # Create your views here.
 
 def login_page(request):
@@ -19,7 +18,7 @@ def login_page(request):
             if user is not None:
                 print('here')
                 login(request, user)
-
+                test()
                 return redirect('/')
             else:
                 messages.error(request, 'username or password not correct')

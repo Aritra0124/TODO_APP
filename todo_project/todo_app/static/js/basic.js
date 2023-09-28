@@ -9,4 +9,9 @@ $(document).ready(function() {
         $("#login").toggle();
         $(".card-title").html("Login");
     });
+    if($(".alert").html() != ''){
+        setTimeout(function() {
+            $(".alert").hide()
+        }, 5000);
+    }
 });

@@ -20,6 +20,7 @@ class envData:
     DB_PASSWORD = os.getenv('MYSQL_PASSWORD')
     DB_HOST = os.getenv('MYSQL_HOST')
     DB_PORT = os.getenv('MYSQL_PORT')
+    ASANA_TOKEN = os.getenv('ASANA_TOKEN')
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -87,7 +88,7 @@ MESSAGE_TAGS = {
     messages.ERROR: 'alert-danger',
 }
 WSGI_APPLICATION = 'todo_project.wsgi.application'
-
+ASANA_TOKEN = envData.ASANA_TOKEN
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases

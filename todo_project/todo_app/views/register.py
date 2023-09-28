@@ -1,6 +1,6 @@
 from django.contrib.auth import login
 from django.shortcuts import redirect
-from todo_project.todo_app.forms import RegistrationForm
+from ..forms import RegistrationForm
 from django.contrib import messages
 
 def register(request):
