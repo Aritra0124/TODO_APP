@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from ..views.asana_connection import Project, Task
+from ..views.asana_connection import Project, Task, Section
 @api_view(['GET'])
 def test_response(request):
     if request.method == 'GET':
@@ -21,7 +21,7 @@ def task_response(request):
 def get_section_names(request):
     if request.method == 'GET':
         project_gid = request.GET.get("gid")
-        asana_project = Task()
+        asana_project = Section()
         data = {"sections": asana_project.get_sections(project_gid)}
         return Response(data=data, status= status.HTTP_200_OK)
 

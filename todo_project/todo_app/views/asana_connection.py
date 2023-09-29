@@ -47,19 +47,6 @@ class Task(AsanaConfig):
             print("Exception when calling ProjectsApi->get_projects: %s\n" % e)
             return "Error"
 
-    def get_sections(self, guid):
-        try:
-            # Get sections in a project
-            api_response = self.api_instance.get_sections_for_project(guid, opt_fields=['name'])
-            project_sections = []
-            for data in api_response:
-                project_sections.append({
-                    "section_gig": data.gid,
-                    "section_name": data.name
-                })
-            return project_sections
-        except ApiException as e:
-            print("Exception when calling SectionsApi->get_sections_for_project: %s\n" % e)
 
     def create_task(self, data: dict):
         try:
@@ -79,3 +66,20 @@ class Task(AsanaConfig):
         except ApiException as e:
             print("Exception when calling TasksApi->delete_task: %s\n" % e)
             return "error"
+class Section(AsanaConfig):
+    def __init__(self):
+        super().__init__()
+        self.api_instance = asana.SectionsApi(self.api_client)
+    def get_sections(self, guid):
+        try:
+            # Get sections in a project
+            api_response = self.api_instance.get_sections_for_project(guid, opt_fields=['name'])
+            project_sections = []
+            for data in api_response.data:
+                project_sections.append({
+                    "section_gig": data.gid,
+                    "section_name": data.name
+                })
+            return project_sections
+        except ApiException as e:
+            print("Exception when calling SectionsApi->get_sections_for_project: %s\n" % e)
