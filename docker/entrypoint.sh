@@ -10,6 +10,8 @@ while ! nc -z ${MYSQL_HOST} ${MYSQL_PORT}; do sleep 1; done
 echo "Connected to database."
 
 # Apply database migrations
+python manage.py makemigrations
+
 python manage.py migrate
 
 # Collect static files (if applicable)
