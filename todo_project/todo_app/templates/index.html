@@ -58,7 +58,7 @@
 <p> Project Name: <span id="project_name"></span></p>
 
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onclick="get_sections()">
+<button type="button" style="margin: 10px; display: none;" class="btn btn-primary" data-toggle="modal" id="task" data-target="#exampleModal" onclick="get_sections()">
 Create New Task</button>
 
 <!-- Modal -->
@@ -73,11 +73,15 @@ Create New Task</button>
       </div>
       <div class="modal-body">
         <label for="task_name">Task Name:</label>
-        <input type="text" id="task_name">
+        <input type="text" id="task_name"><br>
+        <label for="section_dropdown" >Select Section:</label>
+        <select id="section_dropdown" ></select><br>
+        <label for="task_note" >Add Note:</label>
+        <textarea id="task_note" ></textarea>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" id="close_modal" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="create_task()">Create</button>
+        <button type="button" class="btn btn-primary" id="task_operation" onclick="create_task()">Create</button>
       </div>
     </div>
   </div>
@@ -86,6 +90,7 @@ Create New Task</button>
 <div id="task-div" style="margin: 10px;"></div>
 
 <script>$(document).ready(function() {
+    $(".modal").show();
     get_project();});
 </script>
 {% endif %}

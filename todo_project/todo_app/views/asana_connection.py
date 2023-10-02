@@ -34,13 +34,15 @@ class Task(AsanaConfig):
     def get_task_name(self, project_gid):
         try:
             # Get multiple tasks
-            api_response = self.api_instance.get_tasks_for_project(project_gid, opt_fields=['name', 'memberships.section.name'])
+            api_response = self.api_instance.get_tasks_for_project(project_gid, opt_fields=['name', 'memberships.section.name', 'notes'])
             task_data = []
             for data in api_response.data:
                 task_data.append({
                     "task_name" : data.name,
                     "task_gid": data.gid,
-                    "task_section_name": data.memberships[0].section.name
+                    "task_note": data.notes,
+                    "task_section_name": data.memberships[0].section.name,
+                    "task_section_gid": data.memberships[0].section.gid
                 })
             return task_data
         except ApiException as e:
@@ -48,15 +50,29 @@ class Task(AsanaConfig):
             return "Error"
 
 
-    def create_task(self, data: dict):
+    def create_task(self, data: dict, section_gid):
         try:
             # Create a task
             body = asana.TasksBody(data)
             api_response = self.api_instance.create_task(body, opt_fields=['name', 'memberships.section.name'])
-            print(api_response.data.gid)
-            return api_response.data.gid
+            if section_gid != 0:
+                update_section = Section()
+                update_section.update_task_section(section_gid, api_response.data.gid)
+            return "Successfully Created"
         except ApiException as e:
             print("Exception when calling TasksApi->create_task: %s\n" % e)
+
+    def edit_task(self, task_gid, data, section_gid):
+        try:
+            # Update a task
+            body = asana.TasksTaskGidBody(data)
+            api_response = self.api_instance.update_task(body, task_gid, opt_fields=['name'])
+            if section_gid != 0:
+                update_section = Section()
+                update_section.update_task_section(section_gid, task_gid)
+            return "Successfully Updated"
+        except ApiException as e:
+            print("Exception when calling TasksApi->update_task: %s\n" % e)
 
     def delete_task(self, task_gid):
         try:
@@ -77,9 +93,18 @@ class Section(AsanaConfig):
             project_sections = []
             for data in api_response.data:
                 project_sections.append({
-                    "section_gig": data.gid,
+                    "section_gid": data.gid,
                     "section_name": data.name
                 })
             return project_sections
         except ApiException as e:
             print("Exception when calling SectionsApi->get_sections_for_project: %s\n" % e)
+
+    def update_task_section(self, section_gid, task_gid):
+        try:
+            body = asana.SectionGidAddTaskBody({"task": task_gid})
+            # Add task to section
+            api_response = self.api_instance.add_task_for_section(section_gid, body=body)
+            return True
+        except ApiException as e:
+            print("Exception when calling SectionsApi->add_task_for_section: %s\n" % e)
