@@ -53,6 +53,8 @@
     </div>
 {% endif %}
 {% if request.user.is_authenticated == True %}
+<p>Todo Task</p>
+
       <a href="{% url 'logout' %}" class="text-warning" style="text-align:right">LogOut</a>
 
 <p> Project Name: <span id="project_name"></span></p>
